@@ -27,4 +27,10 @@ public class todoItemsController {
         System.out.println("POST /todoItems");
         return todoItemService.addTodoItem(todoItem);
     }
+
+    @PutMapping("/{id}")
+    public TodoItem updateTodoItem(@PathVariable Integer id, @RequestBody TodoItem todoItem) {
+        System.out.println("PUT /todoItems/" + id);
+        return todoItemService.updateTodoItem(id, todoItem);
+    }
 }

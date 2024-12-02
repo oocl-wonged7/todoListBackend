@@ -13,7 +13,6 @@ public class TodoItem {
     private String text;
     private Boolean done;
 
-
     public TodoItem(String text) {
         this.text = text;
         this.done = false;
@@ -32,7 +31,15 @@ public class TodoItem {
         return text;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public Boolean getDone() {
         return done;
+    }
+
+    public void setDone(Boolean done) {
+        this.done = done;
     }
 }

@@ -67,4 +67,19 @@ public class TodoItemControllerTest {
         assertThat(addedTodoItem).usingRecursiveComparison().ignoringFields("id").isEqualTo(todoItem);
     }
 
+    @Test
+    void should_update_todo_item() throws Exception {
+        TodoItem firstTodoItem = todoItemRepository.findAll().get(0);
+        firstTodoItem.setText("Buy margarine");
+        String todoItemRequestString = todoItemJson.write(firstTodoItem).getJson();
+        String todoItemResponseString = client.perform(MockMvcRequestBuilders.put("/todoItems/" + firstTodoItem.getId())
+                .contentType("application/json")
+                .content(todoItemRequestString))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        TodoItem updatedTodoItem = todoItemJson.parseObject(todoItemResponseString);
+        assertThat(updatedTodoItem).usingRecursiveComparison().isEqualTo(firstTodoItem);
+    }
+
 }
