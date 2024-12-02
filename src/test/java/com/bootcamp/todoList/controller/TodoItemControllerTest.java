@@ -36,7 +36,7 @@ public class TodoItemControllerTest {
 
     @BeforeEach
     void setUp() {
-        todoItemRepository.findAll().clear();
+        todoItemRepository.deleteAll();
         todoItemRepository.save(new TodoItem("Buy milk"));
         todoItemRepository.save(new TodoItem("Buy eggs"));
         todoItemRepository.save(new TodoItem("Buy bread"));
@@ -71,6 +71,21 @@ public class TodoItemControllerTest {
     void should_update_todo_item() throws Exception {
         TodoItem firstTodoItem = todoItemRepository.findAll().get(0);
         firstTodoItem.setText("Buy margarine");
+        String todoItemRequestString = todoItemJson.write(firstTodoItem).getJson();
+        String todoItemResponseString = client.perform(MockMvcRequestBuilders.put("/todoItems/" + firstTodoItem.getId())
+                .contentType("application/json")
+                .content(todoItemRequestString))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        TodoItem updatedTodoItem = todoItemJson.parseObject(todoItemResponseString);
+        assertThat(updatedTodoItem).usingRecursiveComparison().isEqualTo(firstTodoItem);
+    }
+
+    @Test
+    void should_toggle_todo_item() throws Exception {
+        TodoItem firstTodoItem = todoItemRepository.findAll().get(0);
+        firstTodoItem.setDone(!firstTodoItem.getDone());
         String todoItemRequestString = todoItemJson.write(firstTodoItem).getJson();
         String todoItemResponseString = client.perform(MockMvcRequestBuilders.put("/todoItems/" + firstTodoItem.getId())
                 .contentType("application/json")

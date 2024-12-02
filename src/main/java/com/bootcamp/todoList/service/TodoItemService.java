@@ -28,6 +28,8 @@ public class TodoItemService {
             return null;
         }
         existingTodoItem.setText(todoItem.getText());
+        existingTodoItem.setDone(todoItem.getDone());
         return todoItemRepository.save(existingTodoItem);
     }
+
 }

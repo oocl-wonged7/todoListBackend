@@ -2,6 +2,7 @@ package com.bootcamp.todoList.controller;
 
 import com.bootcamp.todoList.model.TodoItem;
 import com.bootcamp.todoList.service.TodoItemService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class todoItemsController {
     }
 
     @PostMapping
+//    @ResponseStatus(code = org.springframework.http.HttpStatus.CREATED)
     public TodoItem addTodoItem(@RequestBody TodoItem todoItem) {
         System.out.println("POST /todoItems");
         return todoItemService.addTodoItem(todoItem);
