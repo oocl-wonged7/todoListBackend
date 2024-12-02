@@ -35,4 +35,10 @@ public class todoItemsController {
         System.out.println("PUT /todoItems/" + id);
         return todoItemService.updateTodoItem(id, todoItem);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteTodoItem(@PathVariable Integer id) {
+        System.out.println("DELETE /todoItems/" + id);
+        todoItemService.deleteTodoItem(id);
+    }
 }

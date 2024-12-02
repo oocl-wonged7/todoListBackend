@@ -97,4 +97,19 @@ public class TodoItemControllerTest {
         assertThat(updatedTodoItem).usingRecursiveComparison().isEqualTo(firstTodoItem);
     }
 
+    @Test
+    void should_delete_todo_item() throws Exception {
+        TodoItem firstTodoItem = todoItemRepository.findAll().get(0);
+        client.perform(MockMvcRequestBuilders.delete("/todoItems/" + firstTodoItem.getId()))
+                .andExpect(status().isOk());
+
+        List<TodoItem> expectedTodoItems = todoItemRepository.findAll();
+        String todoItemsResponseString = client.perform(MockMvcRequestBuilders.get("/todoItems"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        List<TodoItem> todoItems = todoItemsJson.parseObject(todoItemsResponseString);
+        assertThat(todoItems).usingRecursiveComparison().isEqualTo(expectedTodoItems);
+    }
+
 }

@@ -32,4 +32,7 @@ public class TodoItemService {
         return todoItemRepository.save(existingTodoItem);
     }
 
+    public void deleteTodoItem(Integer id) {
+        todoItemRepository.deleteById(id);
+    }
 }
