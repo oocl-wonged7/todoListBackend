@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class TodoItemControllerTest {
         String todoItemResponseString = client.perform(MockMvcRequestBuilders.post("/todoItems")
                 .contentType("application/json")
                 .content(todoItemRequestString))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
         TodoItem addedTodoItem = todoItemJson.parseObject(todoItemResponseString);
@@ -110,6 +109,17 @@ public class TodoItemControllerTest {
 
         List<TodoItem> todoItems = todoItemsJson.parseObject(todoItemsResponseString);
         assertThat(todoItems).usingRecursiveComparison().isEqualTo(expectedTodoItems);
+    }
+
+    @Test
+    void should_return_todo_item_by_id() throws Exception {
+        TodoItem firstTodoItem = todoItemRepository.findAll().get(0);
+        String todoItemResponseString = client.perform(MockMvcRequestBuilders.get("/todoItems/" + firstTodoItem.getId()))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        TodoItem todoItem = todoItemJson.parseObject(todoItemResponseString);
+        assertThat(todoItem).usingRecursiveComparison().isEqualTo(firstTodoItem);
     }
 
 }

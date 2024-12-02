@@ -1,5 +1,6 @@
 package com.bootcamp.todoList.service;
 
+import com.bootcamp.todoList.exception.TodoItemNotFoundException;
 import com.bootcamp.todoList.model.TodoItem;
 import com.bootcamp.todoList.repository.TodoItemRepository;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class TodoItemService {
     public TodoItem updateTodoItem(Integer id, TodoItem todoItem) {
         TodoItem existingTodoItem = todoItemRepository.findById(id).orElse(null);
         if (existingTodoItem == null) {
-            return null;
+            throw new TodoItemNotFoundException();
         }
         existingTodoItem.setText(todoItem.getText());
         existingTodoItem.setDone(todoItem.getDone());
@@ -34,5 +35,9 @@ public class TodoItemService {
 
     public void deleteTodoItem(Integer id) {
         todoItemRepository.deleteById(id);
+    }
+
+    public TodoItem getTodoItem(Integer id) {
+        return todoItemRepository.findById(id).orElseThrow(TodoItemNotFoundException::new);
     }
 }

@@ -24,7 +24,7 @@ public class todoItemsController {
     }
 
     @PostMapping
-//    @ResponseStatus(code = org.springframework.http.HttpStatus.CREATED)
+    @ResponseStatus(code = org.springframework.http.HttpStatus.CREATED)
     public TodoItem addTodoItem(@RequestBody TodoItem todoItem) {
         System.out.println("POST /todoItems");
         return todoItemService.addTodoItem(todoItem);
@@ -40,5 +40,11 @@ public class todoItemsController {
     public void deleteTodoItem(@PathVariable Integer id) {
         System.out.println("DELETE /todoItems/" + id);
         todoItemService.deleteTodoItem(id);
+    }
+
+    @GetMapping("/{id}")
+    public TodoItem getTodoItem(@PathVariable Integer id) {
+        System.out.println("GET /todoItems/" + id);
+        return todoItemService.getTodoItem(id);
     }
 }
